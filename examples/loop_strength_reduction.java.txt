@@ -1,0 +1,13 @@
+public class LoopStrengthReduction {
+    static void use(int value) {
+    }
+
+    static int run(int n) {
+        int i = 0;
+        while (i < n) {
+            use(i * 5);
+            i = i + 1;
+        }
+        return i;
+    }
+}

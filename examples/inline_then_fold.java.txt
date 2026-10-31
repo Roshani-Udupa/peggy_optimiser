@@ -1,0 +1,9 @@
+public class InlineThenFold {
+    static int twice(int value) {
+        return value * 2;
+    }
+
+    static int run() {
+        return twice(4) + 0;
+    }
+}

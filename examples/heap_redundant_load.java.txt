@@ -1,0 +1,7 @@
+public class HeapRedundantLoad {
+    static int run(int[] values) {
+        values[0] = 3;
+        values[0] = 5;
+        return values[0];
+    }
+}

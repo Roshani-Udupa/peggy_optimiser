@@ -1,0 +1,5 @@
+public class TraditionalFailsPhaseOrder {
+    static int run(int a) {
+        return (a * 2) / 2;
+    }
+}

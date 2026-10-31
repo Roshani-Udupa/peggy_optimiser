@@ -1,0 +1,5 @@
+public class TraditionalWorks {
+    static int run(int x) {
+        return x * 8 + 0;
+    }
+}

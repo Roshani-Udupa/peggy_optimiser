@@ -1,0 +1,11 @@
+public class LoopInvariantMotion {
+    static int run(int n, int a, int b) {
+        int i = 0;
+        int result = 0;
+        while (i < n) {
+            result = result + a * b;
+            i++;
+        }
+        return result;
+    }
+}

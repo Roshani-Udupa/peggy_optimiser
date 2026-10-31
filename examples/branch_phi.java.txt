@@ -1,0 +1,11 @@
+public class BranchPhi {
+    static int run(boolean condition, int a, int b, int c, int d, int e) {
+        int result;
+        if (condition) {
+            result = a * b + a * d;
+        } else {
+            result = a * b + a * e;
+        }
+        return result;
+    }
+}
