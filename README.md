@@ -6,57 +6,74 @@ An interactive compiler explorer that translates a supported Java source subset 
 
 ```mermaid
 flowchart TB
-  Source[Java source program]
+    A["Java Source Program"]
 
-  subgraph EqualitySaturation[Equality saturation pipeline]
-    direction TB
-    FrontEnd[Lexer, parser, and abstract syntax tree]
-    Translator[Java to Program Expression Graph translator]
-    PEG[Program Expression Graph]
-    EGraph[Equivalence classes, union-find, and congruence rebuild]
-    Analyses[Arithmetic · conditional · loop · heap · inlining rules]
-    Saturator[Iterative saturation with resource bounds]
-    Solver[Pseudo-Boolean extraction model]
-    Best[Lowest-cost selected graph]
-    Reconstruct[Java code reconstruction]
+    subgraph FRONTEND["1. Frontend and Representation"]
+        direction LR
+        B["Lexer / Parser / AST"]
+        C["Java to PEG Translator"]
+        D["Program Expression Graph"]
+        E["E-Graph Construction<br/>Equivalence Classes · Union-Find · Rebuild"]
 
-    FrontEnd --> Translator --> PEG --> EGraph
-    EGraph --> Analyses --> Saturator
-    Saturator -->|updated equivalences| EGraph
-    Saturator -->|fixed-point graph| Solver --> Best --> Reconstruct
-  end
+        B --> C --> D --> E
+    end
 
-  subgraph Comparison[Traditional optimization]
-    Passes[Ordered destructive passes]
-    TraditionalResult[Traditional Java result]
-    Passes --> TraditionalResult
-  end
+    subgraph OPT["2. Equality Saturation and Optimization"]
+        direction LR
+        F["Rewrite Rules<br/>Arithmetic · Conditional<br/>Loop · Heap · Inlining"]
+        G["Iterative Saturation<br/>Resource-Bounded"]
+        H["Pseudo-Boolean<br/>Extraction"]
+        I["Lowest-Cost<br/>Equivalent Graph"]
 
-  Source --> FrontEnd
-  Source --> Passes
-  Source --> InputPEG[Original PEG]
-  Reconstruct --> Optimized[Optimized Java result]
+        F --> G --> H --> I
+    end
 
-  subgraph Validation[Translation validation]
-    GraphCheck[Shared equivalence-graph root check]
-    Interpreter[Randomized interpreter comparison]
-  end
+    subgraph OUTPUT["3. Code Generation"]
+        direction LR
+        J["Java Code Reconstruction"]
+        K["Optimized Java Program"]
 
-  InputPEG --> GraphCheck
-  Optimized --> GraphCheck
-  Source --> Interpreter
-  Optimized --> Interpreter
+        J --> K
+    end
 
-  classDef source fill:#21152d,stroke:#bd7bea,color:#f7eaff,stroke-width:2px
-  classDef graph fill:#171d2c,stroke:#82a8e8,color:#e6efff
-  classDef rewrite fill:#291729,stroke:#e084d2,color:#fff0fb
-  classDef solver fill:#291d32,stroke:#c287ee,color:#f6eaff
-  classDef validation fill:#14251f,stroke:#7ac79c,color:#e7fff0
-  class Source,TraditionalResult,Optimized source
-  class PEG,EGraph,InputPEG graph
-  class Analyses,Saturator,Passes rewrite
-  class Solver,Best,Reconstruct solver
-  class GraphCheck,Interpreter validation
+    A --> B
+    E --> F
+    G -. "Updated Equivalences" .-> E
+    I --> J
+
+    subgraph VALIDATION["4. Translation Validation"]
+        direction LR
+        L["Shared E-Graph<br/>Root Equivalence Check"]
+        M["Randomized Interpreter<br/>Comparison"]
+        N["Validation Result"]
+
+        L --> N
+        M --> N
+    end
+
+    D --> L
+    K --> L
+    A --> M
+    K --> M
+
+    classDef input fill:#E8EEF7,stroke:#496A96,color:#172D4D,stroke-width:1.5px
+    classDef frontend fill:#EAF2FA,stroke:#527DA8,color:#183653,stroke-width:1.2px
+    classDef optimization fill:#F1ECFA,stroke:#8265A8,color:#382750,stroke-width:1.2px
+    classDef generation fill:#E8F3F1,stroke:#4D8A7D,color:#173D36,stroke-width:1.2px
+    classDef validation fill:#EDF5EF,stroke:#648B70,color:#24452D,stroke-width:1.2px
+    classDef result fill:#DCEFE4,stroke:#39845B,color:#17452C,stroke-width:2px
+
+    class A input
+    class B,C,D,E frontend
+    class F,G,H,I optimization
+    class J,K generation
+    class L,M validation
+    class N result
+
+    style FRONTEND fill:#F7FAFE,stroke:#9BB3CF,stroke-width:1.5px
+    style OPT fill:#FAF8FD,stroke:#B3A0CE,stroke-width:1.5px
+    style OUTPUT fill:#F5FAF8,stroke:#91B9AE,stroke-width:1.5px
+    style VALIDATION fill:#F5FAF5,stroke:#A0BBA4,stroke-width:1.5px
 ```
 
 ## Run
